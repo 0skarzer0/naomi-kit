@@ -26,6 +26,25 @@
 - El SRAM está **entero repartido** (README): un juego nuevo que guarde necesita que se libere una región (la del
   recomp de Daytona, aparcado, es la candidata).
 
+## Plan para pasar Daytona nativo al kit (2026-11-13, sin hacer a propósito)
+
+No se hizo en esta sesión: Daytona nativo **funciona en placa** y no se puede compilar ni probar sin los datos de la
+ROM del usuario (`recipes/build_assets.sh`) ni enDjinn, así que reescribirlo a ciegas arriesga romper lo que ya va.
+Hacerlo en una rama (`naomi-native-kit`), con la ROM delante y la placa al lado. Mapa pieza a pieza:
+
+| Daytona (`platform/dreamcast-native/naomi/`) | En el kit | Notas |
+|---|---|---|
+| `nm_naomi_boot` (`naomi_log.c`) | `nk_boot(&config)` con `.need_dimm=true`, `.misaligned=false` | Daytona no usa accesos desalineados |
+| `nm_naomi_pvr_up`, `nm_naomi_show_log` | `nk_show_log`; el aviso de «PVR en marcha» hay que añadirlo al kit si hace falta | |
+| `nm_naomi_show_sound_log` (TEST mantenido: log filtrado por «Sound», «music»…) | **falta en el kit** (punto 4 de arriba): añadirlo con el filtro como parámetro | |
+| lista de músicas copiadas a RAM (`naomi_log.c`) | `nk_dimmfs_cache(nombre)` | la lista y su orden se quedan en el port |
+| `naomi_dimmfs.*`, `naomi_dimmcomms.c`, `nm_naomi_live_t` («NEST») | `nk_dimmfs_*`, `nk_dimmcomms_forever`, `nk_live_head` + palabras (fps, vbls, fps_worst, frame_us, render_us…) | el lector de naomi-pi-tools lee los dos formatos |
+| `naomi_input.c` | `nk_cabinet_read`; **se queda** el `__wrap_enj_ctrl_*` que lo entrega a enDjinn | su calibración propia se sustituye por la del kit |
+| `naomi_save.c` | `nk_sram_load/save(0x6000, 0x2000, "DTN1", …)` | la semilla de la suma difiere: añadir `seed` al kit o perder la partida una vez |
+| `naomi_pack.py` | `tools/nk_pack.py` | mismo formato de archivo |
+
+Después de migrar: comparar en placa fps, música, TEST, guardado y mandos antes de borrar nada de la copia.
+
 ## Siguientes pasos
 
 1. Probar OutRunners en la placa con el kit (`live.py ADDR words`: magic `NKLV`, nombres de campos).
