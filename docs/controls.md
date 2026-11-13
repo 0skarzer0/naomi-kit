@@ -35,7 +35,7 @@ funciona como en la recreativa. Lo medido en OutRunners: una pulsación corta em
 | Port | START | Menú |
 |---|---|---|
 | OutRunners | pulsar = moneda, soltar = START | (sin menú propio) |
-| MAME4ALL | freno + START = crédito | (sin documentar aquí) |
+| MAME4ALL | START pulsado = crédito, al soltar = START | (sin documentar aquí) |
 | Cannonball | (sin documentar aquí) | freno + START |
 | Daytona nativo | (sin documentar aquí: mirar su HANDOFF) | — |
 
