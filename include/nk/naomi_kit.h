@@ -13,7 +13,7 @@
  *      nk_boot          main()'s first call: the console into a ring of lines, /dimm mounted, the NetDIMM's peeks
  *                       answered, a watchdog, a sampling profiler, exceptions caught (misaligned accesses done a
  *                       byte at a time, as the V60 and the 68000's code expects)
- *      nk_live_head     the live block's head: tools/pi/live.py reads any game's figures by its field names
+ *      nk_live_head     the live block's head: naomi-pi-tools' pi/live.py reads any game's figures by its field names
  *      nk_cabinet_read  the JVS controls as a wheel, two pedals, a two-position shifter, START, coins
  *      nk_dimmfs_*      read-only files appended to the netboot image (tools/nk_pack.py), mounted at /dimm
  *      nk_sram_*        a save in the board's 32 KB of battery-backed SRAM, in a region of the game's own
@@ -33,7 +33,7 @@ extern "C" {
 /* ---- the live block ----
 
    A game keeps its live figures in a struct of 32-bit words that starts with an nk_live_head; the head says where
-   the names of the game's own words are, so that tools/pi/live.py shows any game's figures. Its address: the
+   the names of the game's own words are, so that naomi-pi-tools' pi/live.py shows any game's figures. Its address: the
    console's line "naomi-kit: live figures at 0x8c......", or `sh-elf-nm game.elf | grep <its name>`. Words, little
    endian; the Raspberry reads them with DragonMinded's netdimm.py (NetDimm(ip).peek). */
 

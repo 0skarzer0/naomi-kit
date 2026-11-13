@@ -14,12 +14,12 @@ seguir: [HANDOFF.md](HANDOFF.md).
 | Piece | What it does |
 |---|---|
 | `nk_boot` (`src/nk_boot.c`) | `main()`'s first call. The console into a ring of lines (shown on the screen on a failure, readable live from the Raspberry), `/dimm` mounted, the NetDIMM's peeks answered, a watchdog (no frame for a while: the console on the screen with the stuck thread's pc and pr), a sampling profiler, exceptions caught: misaligned loads and stores done a byte at a time (code translated from the V60, 68000 or i960 does them; the SH-4 faults), anything else written to the console while the peeks keep answering |
-| Live block (`nk_live_head`) | The game's live figures start with a head that names them: `tools/pi/live.py` shows any game's words by name; `test_inputs` lets a script play with no one at the cabinet |
+| Live block (`nk_live_head`) | The game's live figures start with a head that names them: [naomi-pi-tools](https://github.com/0skarzer0/naomi-pi-tools)' `pi/live.py` (the one live reader of every project, installed with the kit's tools) shows any game's words by name; `test_inputs` lets a script play with no one at the cabinet |
 | `nk_cabinet_read` (`src/nk_cabinet.c`) | The JVS controls through the MIE as a wheel (-128..127 and 0..255), gas and brake (0..255 with dead ends), the shifter, START, SERVICE, TEST and coins (by the coin meters' difference). The ranges start at the values measured on a Crazy Taxi upright and widen by themselves. `nk_cabinet_start_coin(n)`: START as the coin button too (a press inserts a coin, the release is START) |
 | `nk_dimmfs_*` (`src/nk_dimmfs.c`) | Read-only files appended to the netboot image by `tools/nk_pack.py`, read through the cartridge port and mounted at `/dimm` (`fopen("/dimm/…")`); `nk_dimmfs_cache` copies one into main RAM |
 | `nk_sram_*` (`src/nk_sram.c`) | A save in the 32 KB of battery-backed SRAM, in the game's own region, with a magic and a checksum |
 | `tools/nk_pack.py` | The netboot image: naomibintool's `.bin` with the `/dimm` archive after it |
-| `tools/pi/` | On the netbooter Raspberry (WiPi): `live.py ADDR fps|log|words`, `watch.py` (the console as it comes, a poke first), `profile.py` (the profiler's pcs for `sh-elf-addr2line`), `drive.py` (a race with no one at the cabinet), `info.py`; from a computer on its LAN: `install.sh`, `send.sh`, `dimm_wait.sh` (`pi_env.sh`: the password is never stored) |
+| `tools/pi/` | On the netbooter Raspberry (WiPi): `live.py ADDR fps|log|words` ([naomi-pi-tools](https://github.com/0skarzer0/naomi-pi-tools)' `pi/live.py`, copied by `install.sh`), `watch.py` (the console as it comes, a poke first), `profile.py` (the profiler's pcs for `sh-elf-addr2line`), `drive.py` (a race with no one at the cabinet), `info.py`; from a computer on its LAN: `install.sh`, `send.sh`, `dimm_wait.sh` (`pi_env.sh`: the password is never stored) |
 
 Controls scheme for every game on the cabinet (a proposal): [docs/controls.md](docs/controls.md).
 

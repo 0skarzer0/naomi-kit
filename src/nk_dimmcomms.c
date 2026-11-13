@@ -1,7 +1,7 @@
 /**
  *    Name:        nk_dimmcomms.c
  *    Description: answers the NetDIMM's peeks and pokes, so that the netbooter's Raspberry can read the live figures
- *                 (naomi_kit.h, tools/pi/live.py) and the console ring while the game runs
+ *                 (naomi_kit.h, naomi-pi-tools' pi/live.py) and the console ring while the game runs
  *    Created:     13-11-2026
  *
  *    license:BSD-3-Clause

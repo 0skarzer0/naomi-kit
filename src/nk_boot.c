@@ -9,7 +9,7 @@
  *    OutRunners' (0skarzer0/outrunners-port, branch naomi). A cabinet has no serial cable and no dcload, and
  *    KallistiOS's SCIF output would wait on its FIFO for every line: the console goes to a dbgio device that keeps
  *    the last lines, shown on the screen when something fails or the game stops running frames (with the watched
- *    thread's pc and pr, for sh-elf-addr2line), and readable live through the NetDIMM (tools/pi/live.py log).
+ *    thread's pc and pr, for sh-elf-addr2line), and readable live through the NetDIMM (naomi-pi-tools' pi/live.py log).
  */
 #include <kos.h>
 #include <kos/dbgio.h>

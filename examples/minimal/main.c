@@ -1,7 +1,7 @@
 /**
  *    Name:        main.c
  *    Description: naomi-kit's smallest game: the controls and the seconds on the screen, live figures for the
- *                 Raspberry (tools/pi/live.py), the console on the screen when TEST is held
+ *                 Raspberry (naomi-pi-tools' pi/live.py), the console on the screen when TEST is held
  *    Created:     13-11-2026
  *
  *    license:BSD-3-Clause
