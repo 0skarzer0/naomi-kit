@@ -21,6 +21,8 @@ seguir: [HANDOFF.md](HANDOFF.md).
 | `tools/nk_pack.py` | The netboot image: naomibintool's `.bin` with the `/dimm` archive after it |
 | `tools/pi/` | On the netbooter Raspberry (WiPi): `live.py ADDR fps|log|words`, `watch.py` (the console as it comes, a poke first), `profile.py` (the profiler's pcs for `sh-elf-addr2line`), `drive.py` (a race with no one at the cabinet), `info.py`; from a computer on its LAN: `install.sh`, `send.sh`, `dimm_wait.sh` (`pi_env.sh`: the password is never stored) |
 
+Controls scheme for every game on the cabinet (a proposal): [docs/controls.md](docs/controls.md).
+
 ## Using it
 
 ```make
