@@ -72,7 +72,8 @@ python3 /sbin/piforce/naomi-kit/drive.py 0x8c...... 100      # a race with no on
 | Region | Whose |
 |---|---|
 | 0x0000-0x0FFF | Cannonball (OutRun) |
-| 0x1000-0x5FFF | Daytona USA, the recompilation (branch `naomi`, parked) |
+| 0x1000-0x1FFF | OutRunners (the Dreamcast port by Pezz82 for NAOMI, [OutRunners-Dreamcast](https://github.com/0skarzer0/OutRunners-Dreamcast/tree/naomi), `ports/naomi/naomi_save.c`: magic `ORUN`) |
+| 0x2000-0x5FFF | free (it was the Daytona USA recompilation's, branch `naomi`, unmaintained: it would overwrite OutRunners' records if run) |
 | 0x6000-0x7FFF | Daytona USA, the native port |
 
 The SRAM is all taken: a new game that saves needs a region given back (the parked recompilation's is the candidate)

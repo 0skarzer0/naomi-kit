@@ -144,7 +144,7 @@ void nk_dimmfs_unlock(void);
 /* ---- the SRAM ----
 
    32 KB, battery-backed, at 0x00200000, byte-wide, shared by every homebrew on the board: each keeps to its own
-   region (README.md has the table: Cannonball 0x0000-0x0FFF, Daytona USA recomp 0x1000-0x5FFF, Daytona USA native
+   region (README.md has the table: Cannonball 0x0000-0x0FFF, OutRunners 0x1000-0x1FFF, free 0x2000-0x5FFF, Daytona USA native
    0x6000-0x7FFF). A save here: 16 bytes of header (magic, size, checksum) and the data, the magic written last. */
 
 /* The save in the region at 'offset' of 'region' bytes, with the four-letter 'magic', into 'data' (at most 'size'
