@@ -31,7 +31,7 @@ static volatile unsigned line_count;
 static unsigned column;
 static kthread_t *watched;
 static nk_config config;
-static uint32_t profile_pcs[PROFILE_SAMPLES];
+static uint32_t profile_pcs[PROFILE_SAMPLES], profile_prs[PROFILE_SAMPLES];
 
 void nk_dimmcomms_start(volatile nk_live_head *block, void (*each_second)(void));    /* (nk_dimmcomms.c) */
 
@@ -347,8 +347,9 @@ void nk_watch_thread(void *thread)
 	watched = (kthread_t *)thread;
 }
 
-/* Every millisecond, where the watched thread was when it was interrupted (its saved pc): a ring the Raspberry
-   reads (tools/pi/profile.py) and sh-elf-addr2line names */
+/* Every millisecond, where the watched thread was when it was interrupted (its saved pc and pr): a ring the
+   Raspberry reads (tools/pi/profile.py) and sh-elf-addr2line names. A thread that waits (blocked on a semaphore,
+   a sleep, the vblank) is not sampled, only counted: the ring is where the time goes when it works */
 static void *profiler(void *unused)
 {
 	(void)unused;
@@ -357,8 +358,16 @@ static void *profiler(void *unused)
 		thd_sleep(1);
 		if (watched && watched != thd_get_current() && config.live)
 		{
-			profile_pcs[config.live->profile_count % PROFILE_SAMPLES] = watched->context.pc;
-			config.live->profile_count++;
+			if (watched->state != STATE_READY && watched->state != STATE_RUNNING)
+				config.live->profile_waiting++;
+			else
+			{
+				const uint32_t at = config.live->profile_count % PROFILE_SAMPLES;
+
+				profile_pcs[at] = watched->context.pc;
+				profile_prs[at] = watched->context.pr;
+				config.live->profile_count++;
+			}
 		}
 	}
 	return NULL;
@@ -403,6 +412,7 @@ int nk_boot(const nk_config *given)
 		live->log_width = LOG_WIDTH;
 		live->log_next = (uint32_t)(uintptr_t)&line_count;
 		live->profile_pcs = (uint32_t)(uintptr_t)profile_pcs;
+		live->profile_prs = (uint32_t)(uintptr_t)profile_prs;
 		live->profile_size = PROFILE_SAMPLES;
 		live->heap_left = nk_heap_left();
 	}

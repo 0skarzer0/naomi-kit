@@ -9,7 +9,8 @@ from netdimm import NetDimm, PeekPokeTypeEnum as T
 
 MAGIC = 0x564c4b4e  # "NKLV"
 HEAD = ('magic version game names count seconds dimm_requests log_lines log_count log_width log_next heap_left '
-        'misaligned profile_pcs profile_count profile_size test_inputs inputs frames_alive').split()
+        'misaligned profile_pcs profile_count profile_size test_inputs inputs frames_alive profile_prs '
+        'profile_waiting').split()
 HEAD_WORDS = 24     # 0x60 bytes
 FIELD = {name: 4 * index for index, name in enumerate(HEAD)}
 

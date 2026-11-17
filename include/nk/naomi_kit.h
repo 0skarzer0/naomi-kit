@@ -54,7 +54,8 @@ typedef struct
 	uint32_t log_next;         /* +0x28 address of the number of lines written so far (index % log_count) */
 	uint32_t heap_left;        /* +0x2c bytes above the heap's top, once a second */
 	uint32_t misaligned;       /* +0x30 misaligned loads and stores done a byte at a time */
-	uint32_t profile_pcs;      /* +0x34 address of profile_size words: the watched thread's pc, sampled every ms */
+	uint32_t profile_pcs;      /* +0x34 address of profile_size words: the watched thread's pc, sampled every ms while
+	                              it runs or is ready (not while it waits: those are counted in profile_waiting) */
 	uint32_t profile_count;    /* +0x38 samples taken (the ring's next index is this modulo profile_size) */
 	uint32_t profile_size;     /* +0x3c */
 	uint32_t test_inputs;      /* +0x40 pokeable, to play with no one at the cabinet (nk_cabinet_read): bit 31 on;
@@ -63,7 +64,9 @@ typedef struct
 	uint32_t inputs;           /* +0x44 what nk_cabinet_read read last: wheel | gas << 8 | brake << 16 | buttons << 24
 	                              (bit 24 START, 25 forward, 26 back, 27 coin, 28 SERVICE, 29 TEST) */
 	uint32_t frames_alive;     /* +0x48 the game counts its frames here: the watchdog's sign of life */
-	uint32_t reserved[5];      /* +0x4c (the head is 0x60 bytes) */
+	uint32_t profile_prs;      /* +0x4c address of profile_size words: its pr at the same samples (the caller) */
+	uint32_t profile_waiting;  /* +0x50 samples skipped because it was waiting (blocked: idle time) */
+	uint32_t reserved[3];      /* +0x54 (the head is 0x60 bytes) */
 } nk_live_head;
 
 /* ---- the boot ---- */
