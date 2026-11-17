@@ -76,8 +76,7 @@ python3 /sbin/piforce/naomi-kit/drive.py 0x8c...... 100      # a race with no on
 | 0x2000-0x5FFF | free (it was the Daytona USA recompilation's, branch `naomi`, unmaintained: it would overwrite OutRunners' records if run) |
 | 0x6000-0x7FFF | Daytona USA, the native port |
 
-The SRAM is all taken: a new game that saves needs a region given back (the parked recompilation's is the candidate)
-or a smaller one agreed here.
+A new game that saves takes a piece of 0x2000-0x5FFF and writes it in this table.
 
 ## Users
 
