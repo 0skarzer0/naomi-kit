@@ -329,7 +329,7 @@ static void *watchdog(void *unused)
 		if (++still >= (seen ? config.hang_s : config.hang_first_s))
 		{
 			printf("NAOMI HANG: no frame for %u s (%lu run), thread pc %08lx pr %08lx\n", still, (unsigned long)last,
-				watched ? (unsigned long)watched->context.pc : 0ul, watched ? (unsigned long)watched->context.pr : 0ul);
+				watched && watched != NK_WATCH_ALL ? (unsigned long)watched->context.pc : 0ul, watched && watched != NK_WATCH_ALL ? (unsigned long)watched->context.pr : 0ul);
 			nk_show_log("HANG");
 		}
 	}
@@ -350,13 +350,38 @@ void nk_watch_thread(void *thread)
 /* Every millisecond, where the watched thread was when it was interrupted (its saved pc and pr): a ring the
    Raspberry reads (tools/pi/profile.py) and sh-elf-addr2line names. A thread that waits (blocked on a semaphore,
    a sleep, the vblank) is not sampled, only counted: the ring is where the time goes when it works */
+static int sampled_now;
+
+static int sample_ready(kthread_t *thread, void *unused)
+{
+	(void)unused;
+	if (thread == thd_get_current() || thread->state != STATE_READY || (thread->flags & THD_QUEUED) == 0)
+		return 0;
+	if (thread->label[0] == '[')    /* ([idle], [kernel]...) */
+		return 0;
+	const uint32_t at = config.live->profile_count % PROFILE_SAMPLES;
+
+	profile_pcs[at] = thread->context.pc;
+	profile_prs[at] = thread->context.pr;
+	config.live->profile_count++;
+	sampled_now++;
+	return 0;
+}
+
 static void *profiler(void *unused)
 {
 	(void)unused;
 	for (;;)
 	{
 		thd_sleep(1);
-		if (watched && watched != thd_get_current() && config.live)
+		if (watched == NK_WATCH_ALL && config.live)
+		{
+			/* every thread that is ready (the one that ran when the timer woke this one among them) */
+			if (thd_each(sample_ready, NULL) == 0 && sampled_now == 0)
+				config.live->profile_waiting++;
+			sampled_now = 0;
+		}
+		else if (watched && watched != thd_get_current() && config.live)
 		{
 			if (watched->state != STATE_READY && watched->state != STATE_RUNNING)
 				config.live->profile_waiting++;

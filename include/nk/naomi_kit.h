@@ -90,6 +90,8 @@ int nk_boot(const nk_config *config);
 
 /* The thread the watchdog names and the profiler samples (by default the one that called nk_boot) */
 void nk_watch_thread(void *kthread);
+/* (as the watched thread: every ready thread is sampled, for a game whose work runs in several threads) */
+#define NK_WATCH_ALL ((void *)1)
 
 /* The console's last lines on the screen, for good */
 void nk_show_log(const char *why) __attribute__((noreturn));
