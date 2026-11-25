@@ -3,3 +3,5 @@
 *.bin
 *.bin.gz
 __pycache__/
+# errores de los encargos al equipo (agy)
+.agy-tasks/*.err
